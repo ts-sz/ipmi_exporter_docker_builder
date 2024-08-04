@@ -1,0 +1,31 @@
+---
+services:
+  ipmi_exporter:
+    image: ${DOCKER_REGISTRY:-ghcr.io}/${GITHUB_REPOSITORY:-your-username/ipmi-exporter}:${IMAGE_TAG:-latest}
+    build:
+      context: .
+    container_name: ipmi_exporter
+    hostname: ipmi-exporter
+    restart: unless-stopped
+    command: --config.file /config.yml
+    ports:
+      - 9290:9290
+    volumes:
+      - ./ipmi_remote.yml:/config.yml:ro
+    networks:
+      - default
+      - ipmi_net
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:9290/metrics"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  ipmi_net:
+    driver: bridge
