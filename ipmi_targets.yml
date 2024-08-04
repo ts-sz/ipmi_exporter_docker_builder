@@ -1,0 +1,4 @@
+- targets:
+  - 10.255.255.19
+  labels:
+    job: ipmi_exporter

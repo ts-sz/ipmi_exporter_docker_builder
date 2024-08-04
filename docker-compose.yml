@@ -1,7 +1,8 @@
 ---
 services:
   ipmi_exporter:
-    image: ${DOCKER_REGISTRY:-ghcr.io}/${GITHUB_REPOSITORY:-your-username/ipmi-exporter}:${IMAGE_TAG:-latest}
+    # image: ${DOCKER_REGISTRY:-ghcr.io}/${GITHUB_REPOSITORY:-your-username/ipmi-exporter}:${IMAGE_TAG:-latest}
+    image: prometheuscommunity/ipmi-exporter:latest
     build:
       context: .
     container_name: ipmi_exporter
@@ -14,7 +15,6 @@ services:
       - ./ipmi_remote.yml:/config.yml:ro
     networks:
       - default
-      - ipmi_net
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://localhost:9290/metrics"]
       interval: 30s
@@ -27,5 +27,4 @@ services:
         max-file: "3"
 
 networks:
-  ipmi_net:
-    driver: bridge
+  default:

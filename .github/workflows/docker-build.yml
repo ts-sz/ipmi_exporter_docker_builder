@@ -20,6 +20,11 @@ jobs:
       packages: write
 
     steps:
+      - name: Debug
+        run: |
+          echo "GITHUB_REPOSITORY: ${{ github.repository }}"
+          echo "IMAGE_NAME: ${{ env.IMAGE_NAME }}"
+
       - name: Checkout repository
         uses: actions/checkout@v3
 
